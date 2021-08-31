@@ -16,8 +16,26 @@ private:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components", meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* Camera;
+
+	UPROPERTY(VisibleInstanceOnly)
+	class AEndlessRunnerGameModeBase* RunGameMode;
 	
 public:
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite)
+	int32 CurrentLane = 1;
+
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite)
+	int32 NextLane = 0;
+	
+	UFUNCTION(BlueprintImplementableEvent, Category="Lane")
+	void ChangeLane();
+
+	UFUNCTION(BlueprintCallable, Category="Lane")
+	void ChangeLaneUpdate(float Value);
+
+	UFUNCTION(BlueprintCallable, Category="Lane")
+	void ChangeLaneFinished();
+	
 	// Sets default values for this character's properties
 	ARunCharacter();
 	

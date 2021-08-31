@@ -3,8 +3,11 @@
 
 #include "FloorTile.h"
 
+#include "EndlessRunnerGameModeBase.h"
+#include "RunCharacter.h"
 #include "Components/ArrowComponent.h"
 #include "Components/BoxComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 AFloorTile::AFloorTile()
@@ -35,8 +38,6 @@ AFloorTile::AFloorTile()
 	FloorTriggerBox->SetBoxExtent(FVector(32.f, 500.f, 200.f));
 	FloorTriggerBox->SetCollisionProfileName(TEXT("OverlapOnlyPawn"));
 	
-	
-	
 
 }
 
@@ -44,6 +45,13 @@ AFloorTile::AFloorTile()
 void AFloorTile::BeginPlay()
 {
 	Super::BeginPlay();
+
+	RunGameMode = Cast<AEndlessRunnerGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
+
+	check(RunGameMode);
+
+	FloorTriggerBox->OnComponentBeginOverlap.AddDynamic(this, &AFloorTile::OnTriggerBoxOverlap);
+
 	
 }
 
@@ -54,3 +62,29 @@ void AFloorTile::Tick(float DeltaTime)
 
 }
 
+void AFloorTile::OnTriggerBoxOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	ARunCharacter* RunCharacter = Cast<ARunCharacter>(OtherActor);
+	if(RunCharacter)
+	{
+		RunGameMode->AddFloorTile();
+
+		GetWorldTimerManager().SetTimer(DestroyHandle, this, &AFloorTile::DestroyFloorTile, 2.f, false);
+		//GetWorld()->GetTimerManager();
+	}
+
+	
+}
+
+void AFloorTile::DestroyFloorTile()
+{
+	//clean Timer
+	if(DestroyHandle.IsValid())
+	{
+		GetWorldTimerManager().ClearTimer(DestroyHandle);
+		
+	}
+	this->Destroy();
+	
+}

@@ -4,9 +4,11 @@
 
 #include "CoreMinimal.h"
 
-#include "FloorTile.h"
+
 #include "GameFramework/GameModeBase.h"
 #include "EndlessRunnerGameModeBase.generated.h"
+
+class AFloorTile;
 
 /**
  * 
@@ -27,11 +29,15 @@ public:
 	UPROPERTY(VisibleInstanceOnly, Category = "Runtime")
 	FTransform NextSpawnPoint;
 
+	UPROPERTY(VisibleInstanceOnly, Category = "Runtime")
+	TArray<float> LaneSwitchValues;
+	
+
 	UFUNCTION(BlueprintCallable)
 	void CreateInitialFloorTiles();
 
 	UFUNCTION(BlueprintCallable)
-	void AddFloorTile();
+	AFloorTile* AddFloorTile();
 
 protected:
 	virtual void BeginPlay() override;
