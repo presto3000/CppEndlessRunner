@@ -45,6 +45,50 @@ void ARunCharacter::BeginPlay()
 	
 }
 
+void ARunCharacter::OnDeath()
+{
+	bIsDead = false;
+	
+	if(RestartTimerHandle.IsValid())
+	{
+		GetWorldTimerManager().ClearTimer(RestartTimerHandle);
+	}	
+	UKismetSystemLibrary::ExecuteConsoleCommand(GetWorld(), TEXT("RestartLevel"));
+}
+void ARunCharacter::Death()
+{
+	if(!bIsDead)
+	{	
+		const FVector Location = GetActorLocation();
+
+		UWorld* World = GetWorld();
+			if(World)
+			{
+				//Do it once and disable input
+				bIsDead = true;
+				DisableInput(nullptr);
+				//Spawn Particle
+					if(DeathParticleSystem)
+					{
+						UGameplayStatics::SpawnEmitterAtLocation(World, DeathParticleSystem, Location);
+						
+					}
+			}
+			//Play Sound
+			if(DeathSound)
+			{
+				UGameplayStatics::PlaySoundAtLocation(World, DeathSound, Location);
+				
+			}
+			GetMesh()->SetVisibility(false);
+
+			World->GetTimerManager().SetTimer(RestartTimerHandle, this, &ARunCharacter::OnDeath, 1.f);
+	}
+	
+}
+
+
+
 void ARunCharacter::MoveLeft()
 {
 	NextLane = FMath::Clamp(CurrentLane - 1, 0, 2);
@@ -103,3 +147,4 @@ void ARunCharacter::ChangeLaneFinished()
 	CurrentLane = NextLane;
 	
 }
+

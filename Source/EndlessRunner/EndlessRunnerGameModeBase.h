@@ -20,6 +20,7 @@ class ENDLESSRUNNER_API AEndlessRunnerGameModeBase : public AGameModeBase
 
 public:
 
+	
 	UPROPERTY(EditAnywhere, Category = "Config")
 	TSubclassOf<AFloorTile> FloorTileClass;
 	
@@ -37,7 +38,7 @@ public:
 	void CreateInitialFloorTiles();
 
 	UFUNCTION(BlueprintCallable)
-	AFloorTile* AddFloorTile();
+	AFloorTile* AddFloorTile(const bool bSpawnItems);
 
 protected:
 	virtual void BeginPlay() override;
