@@ -106,6 +106,11 @@ void ARunCharacter::MoveDown()
 	UE_LOG(LogTemp, Warning, TEXT("MOVE DOWN WAS PRESSED"));
 }
 
+void ARunCharacter::AddCoin()
+{
+	RunGameMode->AddCoin();
+}
+
 // Called every frame
 void ARunCharacter::Tick(float DeltaTime)
 {

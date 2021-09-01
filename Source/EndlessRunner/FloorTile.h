@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 
 
+#include "CoinItem.h"
 #include "Components/ArrowComponent.h"
 #include "GameFramework/Actor.h"
 #include "FloorTile.generated.h"
@@ -14,7 +15,7 @@ class UStaticMeshComponent;
 class USceneComponent;
 class UBoxComponent;
 class AObstacle;
-
+class ACoinItem;
 
 UCLASS()
 class ENDLESSRUNNER_API AFloorTile : public AActor
@@ -28,6 +29,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Config")
 	TSubclassOf<AObstacle> BigObstacleClass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Config")
+	TSubclassOf<ACoinItem> CoinItemClass;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	USceneComponent* SceneComponent;
@@ -50,6 +54,16 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	UBoxComponent* FloorTriggerBox;
 
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Config")
+	float SpawnPercent1 = 0.1f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Config")
+	float SpawnPercent2 = 0.3f;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Config")
+	float SpawnPercent3 = 0.5f;
+	
 	UFUNCTION(BlueprintCallable)
 	void SpawnItems();
 
@@ -80,7 +94,7 @@ protected:
 	
 	UFUNCTION()
 	void DestroyFloorTile();
-
+	
 	
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

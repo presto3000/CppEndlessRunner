@@ -71,7 +71,10 @@ protected:
 	bool bIsDead = false;
 	
 
-public:	
+public:
+	UFUNCTION()
+	void AddCoin();
+	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
