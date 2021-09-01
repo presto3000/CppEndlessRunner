@@ -6,6 +6,7 @@
 #include "EndlessRunnerGameModeBase.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Kismet/GameplayStatics.h"
 //#include "Kismet/KismetMathLibrary.h"
@@ -103,7 +104,12 @@ void ARunCharacter::MoveRight()
 
 void ARunCharacter::MoveDown()
 {
-	UE_LOG(LogTemp, Warning, TEXT("MOVE DOWN WAS PRESSED"));
+	//UE_LOG(LogTemp, Warning, TEXT("MOVE DOWN WAS PRESSED"));
+	//static local vector:
+	static FVector Impulse = FVector(0, 0 , MoveDownImpulse);
+	GetCharacterMovement()->AddImpulse(Impulse, true);
+
+	
 }
 
 void ARunCharacter::AddCoin()
