@@ -4,27 +4,27 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
-#include "MainMenu.generated.h"
+#include "GameOver.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class ENDLESSRUNNER_API UMainMenu : public UUserWidget
+class ENDLESSRUNNER_API UGameOver : public UUserWidget
 {
 	GENERATED_BODY()
 	protected:
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
-	class UButton* StartBtn;
+	class UButton* MainMenuBtn;
 
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
-	class UButton* QuitBtn;
+	class UButton* RestartBtn;
 	
 	virtual void NativeConstruct() override;
 
 	UFUNCTION()
-	void OnStartClick();
+	void OnMainMenuClick();
 
 	UFUNCTION()
-	void OnQuitClick();
+	void OnRestartClick();
 };

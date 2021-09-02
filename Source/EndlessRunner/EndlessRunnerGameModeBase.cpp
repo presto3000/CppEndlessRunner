@@ -79,6 +79,7 @@ AFloorTile* AEndlessRunnerGameModeBase::AddFloorTile(const bool bSpawnItems)
 	
 }
 
+
 void AEndlessRunnerGameModeBase::AddCoin()
 {
 	TotalCoins += 1;
@@ -95,7 +96,7 @@ void AEndlessRunnerGameModeBase::PlayerDied()
 
 	if(NumberOfLives > 0)
 	{
-		//Iterate all FloorTiles and call DestroryFloorTiles
+		//Iterate all FloorTiles and call DestroyFloorTiles
 		// for(AFloorTile* Tile : FloorTiles)
 		for(auto Tile : FloorTiles)
 		{
@@ -105,7 +106,7 @@ void AEndlessRunnerGameModeBase::PlayerDied()
 
 		FloorTiles.Empty();
 
-		//Next SpawnPoin to initial value
+		//Next SpawnPoint to initial value
 		NextSpawnPoint = FTransform();
 		//Create our Initial Floor tiles
 		CreateInitialFloorTiles();
@@ -114,10 +115,22 @@ void AEndlessRunnerGameModeBase::PlayerDied()
 	}
 	else
 	{
-		//GameOver
+		GameOver();
 	}
 	
 }
+void AEndlessRunnerGameModeBase::GameOver()
+{
+	if(IsValid(GameOverScreenClass))
+	{
+		UUserWidget* Widget = CreateWidget(GetWorld(),GameOverScreenClass);
+		if(Widget)
+		{
+			Widget->AddToViewport();
+		}
+	}
+}
+
 
 void AEndlessRunnerGameModeBase::RemoveTile(AFloorTile* Tile)
 {

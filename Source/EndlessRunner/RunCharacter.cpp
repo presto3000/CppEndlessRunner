@@ -51,7 +51,7 @@ void ARunCharacter::BeginPlay()
 
 void ARunCharacter::OnDeath()
 {
-	bIsDead = false;
+
 	
 	if(RestartTimerHandle.IsValid())
 	{
