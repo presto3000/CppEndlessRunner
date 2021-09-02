@@ -7,6 +7,7 @@
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "GameFramework/PlayerStart.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Kismet/GameplayStatics.h"
 //#include "Kismet/KismetMathLibrary.h"
@@ -43,7 +44,9 @@ void ARunCharacter::BeginPlay()
 
 	check(RunGameMode);
 	
-	
+	RunGameMode->OnLevelReset.AddDynamic(this, &ARunCharacter::ResetLevel);
+
+	PlayerStart = Cast<APlayerStart>(UGameplayStatics::GetActorOfClass(GetWorld(),APlayerStart::StaticClass()));
 }
 
 void ARunCharacter::OnDeath()
@@ -54,7 +57,22 @@ void ARunCharacter::OnDeath()
 	{
 		GetWorldTimerManager().ClearTimer(RestartTimerHandle);
 	}	
-	UKismetSystemLibrary::ExecuteConsoleCommand(GetWorld(), TEXT("RestartLevel"));
+	//UKismetSystemLibrary::ExecuteConsoleCommand(GetWorld(), TEXT("RestartLevel"));
+
+	RunGameMode->PlayerDied();
+}
+
+void ARunCharacter::ResetLevel()
+{
+	bIsDead = false;
+	EnableInput(nullptr);
+	GetMesh()->SetVisibility(true);
+	
+	if(PlayerStart)
+	{
+		SetActorLocation(PlayerStart->GetActorLocation());
+		SetActorRotation(PlayerStart->GetActorRotation());
+	}
 }
 void ARunCharacter::Death()
 {
@@ -111,6 +129,8 @@ void ARunCharacter::MoveDown()
 
 	
 }
+
+
 
 void ARunCharacter::AddCoin()
 {

@@ -24,6 +24,9 @@ protected:
 	class UTextBlock* CoinsCount;
 
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
+	class UTextBlock* LivesCount;
+	
+	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	class UButton* PauseBtn;
 
 	UFUNCTION()
@@ -37,4 +40,7 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void SetCoinsCount(int32 Count);
+
+	UFUNCTION(BlueprintCallable)
+	void SetLivesCount(int32 Count);
 };

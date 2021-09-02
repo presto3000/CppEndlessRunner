@@ -54,7 +54,11 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	UBoxComponent* FloorTriggerBox;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	TArray<AActor*> ChildActors;
 
+
+	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Config")
 	float SpawnPercent1 = 0.1f;
 
@@ -67,6 +71,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SpawnItems();
 
+	UFUNCTION(BlueprintCallable)
+	void DestroyFloorTile();
 	
 	// Sets default values for this actor's properties
 	AFloorTile();
@@ -92,8 +98,7 @@ protected:
 	void SpawnLaneItem(UArrowComponent* Lane, int32& NumBigs);
 	
 	
-	UFUNCTION()
-	void DestroyFloorTile();
+
 	
 	
 	// Called when the game starts or when spawned

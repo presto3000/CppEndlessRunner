@@ -8,6 +8,7 @@
 
 
 #include "Blueprint/UserWidget.h"
+#include "Chaos/ChaosPerfTest.h"
 #include "Kismet/GameplayStatics.h"
 
 void AEndlessRunnerGameModeBase::BeginPlay()
@@ -21,6 +22,9 @@ void AEndlessRunnerGameModeBase::BeginPlay()
 	//Broadcasting:
 	GameHud->InitializeHUD(this);
 	GameHud->AddToViewport();
+
+	//Setting number of lives to max lives
+	NumberOfLives = MaxLives;
 	
 	CreateInitialFloorTiles();
 }
@@ -60,6 +64,8 @@ AFloorTile* AEndlessRunnerGameModeBase::AddFloorTile(const bool bSpawnItems)
 
 		if(Tile)
 		{
+			//Adding Tiles, later to destroy after character losing live
+			FloorTiles.Add(Tile);
 			if(bSpawnItems)
 			{
 				Tile->SpawnItems();
@@ -80,6 +86,43 @@ void AEndlessRunnerGameModeBase::AddCoin()
 	OnCoinsCountChanged.Broadcast(TotalCoins);
 	
 	UE_LOG(LogTemp, Warning, TEXT("TOTAL COINS: %d"), TotalCoins);
+}
+
+void AEndlessRunnerGameModeBase::PlayerDied()
+{
+	NumberOfLives -= 1;
+	OnLivesCountChanged.Broadcast(NumberOfLives);
+
+	if(NumberOfLives > 0)
+	{
+		//Iterate all FloorTiles and call DestroryFloorTiles
+		// for(AFloorTile* Tile : FloorTiles)
+		for(auto Tile : FloorTiles)
+		{
+			Tile->DestroyFloorTile();
+		}
+		//Empty our array
+
+		FloorTiles.Empty();
+
+		//Next SpawnPoin to initial value
+		NextSpawnPoint = FTransform();
+		//Create our Initial Floor tiles
+		CreateInitialFloorTiles();
+		//Broadcast Level reset event
+		OnLevelReset.Broadcast();
+	}
+	else
+	{
+		//GameOver
+	}
+	
+}
+
+void AEndlessRunnerGameModeBase::RemoveTile(AFloorTile* Tile)
+{
+	FloorTiles.Remove(Tile);
+	
 }
 
 

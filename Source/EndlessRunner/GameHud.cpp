@@ -24,8 +24,11 @@ void UGameHud::InitializeHUD(AEndlessRunnerGameModeBase* RunGameMode)
 	if(RunGameMode)
 	{
 		CoinsCount->SetText(FText::AsNumber(0));
+		LivesCount->SetText(FText::AsNumber(RunGameMode->MaxLives));
 
 		RunGameMode->OnCoinsCountChanged.AddDynamic(this, &UGameHud::SetCoinsCount);
+		RunGameMode->OnLivesCountChanged.AddDynamic(this, &UGameHud::SetLivesCount);
+		
 	}
 
 	
@@ -34,6 +37,11 @@ void UGameHud::InitializeHUD(AEndlessRunnerGameModeBase* RunGameMode)
 void UGameHud::SetCoinsCount(const int32 Count) 
 {
 	CoinsCount->SetText(FText::AsNumber(Count));
+}
+
+void UGameHud::SetLivesCount(int32 Count)
+{
+	LivesCount->SetText(FText::AsNumber(Count));
 }
 
 void UGameHud::OnPauseClick()
